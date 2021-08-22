@@ -2,6 +2,10 @@
 from re import DEBUG
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
+from main import Main
+import cv2
+import numpy as np
+
 app = Flask(__name__)
 
 @app.route("/", methods=['GET', 'POST'])
@@ -12,10 +16,15 @@ def index():
     if request.method == "POST":
         files = request.files.getlist('image-files')
 
-        num = 'a'
-        for file in files:
-            file.save('c:/Github/Python/FCN/Images/' + num + secure_filename(file.filename))
-            num = num+'a'
+        np_img = np.fromfile(files[0], np.uint8)
+
+        ori_img = cv2.imdecode(np_img, cv2.IMREAD_COLOR)
+        bg_img = cv2.imread('./images/Background/Background-white.jpg', cv2.IMREAD_COLOR)
+        cv2.imshow('test', bg_img)
+        cv2.waitKey(0)
+        #main = Main(ori_img, bg_img)   
+        
+        #main.convert()
 
         return render_template('index.html')
 

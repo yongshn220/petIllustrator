@@ -14,11 +14,19 @@ class Segmentation:
 
 
     def segment(self, img):
-        return self.process(self.dlab, img, show_orig=False)
+        pil_img = self.convert_image(img)
+
+        return self.process(self.dlab, pil_img, show_orig=False)
 
 
-    def process(self, net, path, show_orig=True, dev='cuda'):
-        img = Image.open(path)
+    def convert_image(self, img):
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        res_img = Image.fromarray(img)
+        return res_img
+
+
+    def process(self, net, img, show_orig=True, dev='cuda'):
+        #img = Image.open(path)
 
         if show_orig:
             plt.imshow(img)
