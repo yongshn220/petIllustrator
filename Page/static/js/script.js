@@ -8,6 +8,7 @@ submitInput = document.querySelector(".input-submit")
 
 let files;
 
+
 //If user Drag File Over DropArea
 dropArea.addEventListener("dragover", (event)=>{
     event.preventDefault(); //preventing from default behaviour
@@ -69,17 +70,37 @@ function validCall()
     fileInput.files = files;
     submitInput.classList.add("active");
     submitInput.disabled = false;
+
+    showFile(files[0]);
 }
 
-function showFile()
+function receiveFile(data)
 {
+    let resultImage = jsonToBlob(data);
+    showFile(resultImage);
+}
+
+function jsonToBlob(json)
+{
+    const str = JSON.stringify(json);
+    const bytes = new TextEncoder().encode(str);
+    const blob = new Blob([bytes], {
+        type: "application/json;charset=urf-8"
+    });
+    return blob;
+}
+
+function showFile(file)
+{
+    console.log("show");
     //if user selected file is an image file
     let fileReader = new FileReader(); //creating new FileReader object
     fileReader.onload = ()=>{
-    let fileURL = fileReader.result; //passing user file source in fileURL variable
-        // UNCOMMENT THIS BELOW LINE. I GOT AN ERROR WHILE UPLOADING THIS POST SO I COMMENTED IT
-    let imgTag = `<img src="${fileURL}" alt="image">`; //creating an img tag and passing user selected file source inside src attribute
-    dropArea.innerHTML = imgTag; //adding that created img tag inside dropArea container
+        console.log("loader");
+        let fileURL = fileReader.result; //passing user file source in fileURL variable
+            // UNCOMMENT THIS BELOW LINE. I GOT AN ERROR WHILE UPLOADING THIS POST SO I COMMENTED IT
+        let imgTag = `<img src="${fileURL}" alt="image">`; //creating an img tag and passing user selected file source inside src attribute
+        dropArea.innerHTML = imgTag; //adding that created img tag inside dropArea container
     }
     fileReader.readAsDataURL(file);
 }
