@@ -5,8 +5,14 @@ from werkzeug.utils import secure_filename
 from main import Main
 import cv2
 import numpy as np
+import os
 
 app = Flask(__name__)
+
+#test
+PEOPLE_FOLDER = os.path.join('static', 'people_photo')
+#test
+app.config['UPLOAD_FOLDER'] = PEOPLE_FOLDER
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -32,7 +38,12 @@ def index2():
         
         result_img = main.convert(ori_img)
         cv2.imwrite('resimg.png', result_img)
-        return render_template('index2.html', resImg=result_img)
+
+        #test
+        full_filename = './resimg.png'
+
+
+        return render_template('index.html', resImg="test")
 
 
 
