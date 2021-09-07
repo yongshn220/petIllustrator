@@ -16,28 +16,25 @@ from model.Cartoonify import Cartoonify
 
 
 class Main:
-    def __init__(self, ori_img):
+    def __init__(self):
         self.segmentation = Segmentation()
         self.preprocess = Preprocess()
         self.cartoonify = Cartoonify()
-        self.origin_img = ori_img
-        self.mask_img = None
-        self.bg_img = cv2.imread('./images/Background/Background-white.jpg', cv2.IMREAD_COLOR)
-        self.result_img = None
 
 
-    def convert(self):
+    def convert(self, ori_img):
 
         # Image Segmentation
-        self.mask_img = self.segment_img()
+        mask_img = self.segment_img(ori_img)
         # Mask Image (Remove background)
-
-        sel_img = self.preprocess.mask_img(self.origin_img, self.mask_img, self.bg_img)
+        bg_img = cv2.imread('./images/Background/Background-white.jpg', cv2.IMREAD_COLOR)
+        # merge all Images (Remove Background)
+        sel_img = self.preprocess.mask_img(ori_img, mask_img, bg_img)
         # Cartoonify Image
-        self.result_img = self.cartoonify.canny_method(sel_img)
+        result_img = self.cartoonify.canny_method(sel_img)
 
-        return self.result_img
+        return result_img
 
-    def segment_img(self):
-        res_img = self.segmentation.segment(self.origin_img)
+    def segment_img(self, ori_img):
+        res_img = self.segmentation.segment(ori_img)
         return res_img

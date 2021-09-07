@@ -18,7 +18,14 @@ class Preprocess:
 
 
     def resize_img(self, img):
-        return cv2.resize(img, dsize=(640, 640), interpolation=cv2.INTER_AREA)
+        resize_img = ''
+
+        try:
+            new_img = cv2.resize(img, dsize=(640, 640), interpolation=cv2.INTER_AREA)
+            resize_img = new_img
+        except: return
+
+        return resize_img
 
 
     def subtrack_img(self, o_img, m_img):

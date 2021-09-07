@@ -23,17 +23,16 @@ def index2():
         
     if request.method == "POST":
         files = request.files.getlist('image-files')
-
+        
         np_img = np.fromfile(files[0], np.uint8)
 
         ori_img = cv2.imdecode(np_img, cv2.IMREAD_COLOR)
 
-        main = Main(ori_img)
+        main = Main()
         
-        result_img = main.convert()
+        result_img = main.convert(ori_img)
         cv2.imwrite('resimg.png', result_img)
-        testMsg = "Test2"
-        return render_template('index2.html', testMsg = testMsg)
+        return render_template('index2.html', resImg=result_img)
 
 
 
