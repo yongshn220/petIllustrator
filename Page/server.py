@@ -7,12 +7,11 @@ import cv2
 import numpy as np
 import os
 
-app = Flask(__name__)
 
-#test
-PEOPLE_FOLDER = os.path.join('static', 'people_photo')
-#test
-app.config['UPLOAD_FOLDER'] = PEOPLE_FOLDER
+RESULT_FOLDER = os.path.join('static', 'image')
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = RESULT_FOLDER
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -37,13 +36,9 @@ def index2():
         main = Main()
         
         result_img = main.convert(ori_img)
-        cv2.imwrite('resimg.png', result_img)
-
-        #test
-        full_filename = './resimg.png'
-
-
-        return render_template('index.html', resImg="test")
+        cv2.imwrite('./Page/static/image/resultImage.png', result_img)
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'resultImage.png')
+        return render_template('index.html', resImg=full_filename)
 
 
 
