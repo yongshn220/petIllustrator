@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from re import DEBUG
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect, url_for
 from werkzeug.utils import secure_filename
 from main import Main
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import cv2
 import numpy as np
 import os
-
 
 RESULT_FOLDER = os.path.join('static', 'image')
 
@@ -29,7 +28,7 @@ def download():
     if request.method == "POST":
         token = request.form['token']
 
-        s = Serializer('WEBSITE_SECRET_KEY', 60*30) # 60 secs by 30 mins
+        s = Serializer('WEBSITE_SECRET_KEY', 60*0.1)
         token = s.dumps({'user_id': token}).decode('utf-8') # encode user id  
 
         files = request.files.getlist('image-files')
@@ -42,9 +41,20 @@ def download():
         return render_template('download.html', resImg=full_filename, token=token)
 
 
-@app.route("/download/<token>")
-def downloadFile():
-    return
+@app.route("/<token>", methods=['GET'])
+def downloadFile(token):
+    s = Serializer('WEBSITE_SECRET_KEY')
+    try:
+        user_id = s.loads(token)['user_id']
+    except:
+        return "Except"
+    #user = User.query.get(user_id)
+
+    if not user_id:
+        flash('This is an invalid or expired URL, please generate a new one!', 'warning')
+        return redirect(url_for('index'))
+
+    return "return fine"
 
 
 def decode(file):
