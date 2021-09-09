@@ -10,16 +10,16 @@
 </head>
 <body>
   <div class="main-area">
-  index_1
     <div class="drag-area">
       <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
       <header>Drag & Drop to Upload File</header>
       <input type="file" hidden>
     </div>
 
-    <img src="{{ resImg }}" alt="User Image">
+    
 
-    <form action="/download" method="post" enctype="multipart/form-data">
+    <form action="/download" method="post" class="action-area" enctype="multipart/form-data">
+      <input type="text" name="token" class="input-token" hidden>
       <input type="file" name="image-files" class="input-file" multiple="multiple" hidden>
       <input type="submit" value="Convert" class="input-submit" disabled>
     </form>

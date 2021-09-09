@@ -1,13 +1,19 @@
 //selecting all required elements
 const dropArea = document.querySelector(".drag-area");
 const mainArea = document.querySelector(".main-area");
+const actionArea = document.querySelector(".action-area");
 
-dragText = dropArea.querySelector("header");
-fileInput = document.querySelector(".input-file")
-submitInput = document.querySelector(".input-submit")
+var dragText = dropArea.querySelector("header");
+var fileInput = actionArea.querySelector(".input-file")
+var submitInput = actionArea.querySelector(".input-submit")
+var tokenInput = actionArea.querySelector(".input-token");
 
 let files;
 
+window.onload = function()
+{
+    tokenInput.value = createToken();
+}
 
 //If user Drag File Over DropArea
 dropArea.addEventListener("dragover", (event)=>{
@@ -104,3 +110,14 @@ function showFile(file)
     }
     fileReader.readAsDataURL(file);
 }
+
+function randomString()
+{
+    return Math.random().toString(36).substr(2); // remove `0.`
+}
+
+function createToken()
+{
+    return randomString() + randomString(); // to make it longer
+}
+
