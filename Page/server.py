@@ -1,21 +1,27 @@
 # -*- coding: utf-8 -*-
+from logging import error
 from re import DEBUG
 from flask import Flask, render_template, request, flash, redirect, url_for
-from werkzeug.utils import secure_filename
+from flask import send_from_directory
 from main import Main
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, exc
 import cv2
 import numpy as np
 import os
 
-RESULT_FOLDER = os.path.join('static', 'image')
+COVER_FOLDER = os.path.join('static', 'image')
+RESULT_FOLDER = "C:\Github\Python\PetIllustrator\Page\images\Result"
+
 
 main = Main()
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = RESULT_FOLDER
+app.config['COVER_FOLDER'] = COVER_FOLDER
+app.config['RESULT_FOLDER'] = RESULT_FOLDER
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+
+
     if request.method == 'GET':
         return render_template('index.html')
 
@@ -26,35 +32,46 @@ def download():
         return render_template('index.html')
         
     if request.method == "POST":
-        token = request.form['token']
+        userId = request.form['userId']
 
-        s = Serializer('WEBSITE_SECRET_KEY', 60*0.1)
-        token = s.dumps({'user_id': token}).decode('utf-8') # encode user id  
+        s = Serializer('WEBSITE_SECRET_KEY', 60*1)
+        token = s.dumps({'user_id': userId}).decode('utf-8') # encode user id  
 
         files = request.files.getlist('image-files')
         
         decide_img = decode(files[0])
         result_img = main.convert(decide_img)
 
-        cv2.imwrite('./Page/static/image/resultImage.png', result_img)
-        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], 'resultImage.png')
-        return render_template('download.html', resImg=full_filename, token=token)
+        #save result image
+        cv2.imwrite('./Page/images/Result/' + userId +'.png', result_img)
+        #save cover image (preview)
+        cv2.imwrite('./Page/static/image/coverImage.png', result_img)
+        #address for cover image (frontend)
+        preview_img = os.path.join(app.config['COVER_FOLDER'], 'coverImage.png')
+        return render_template('download.html', resImg=preview_img, token=token)
 
 
 @app.route("/<token>", methods=['GET'])
 def downloadFile(token):
     s = Serializer('WEBSITE_SECRET_KEY')
+    
     try:
-        user_id = s.loads(token)['user_id']
+        data = s.loads(token)
     except:
-        return "Except"
-    #user = User.query.get(user_id)
+        return 'This is an invalid or expired URL, please generate a new one!'
 
-    if not user_id:
-        flash('This is an invalid or expired URL, please generate a new one!', 'warning')
+    userId = data['user_id']
+
+    if not userId:
         return redirect(url_for('index'))
+    
+    filename = userId + ".png"
+    
+    try:
+        return send_from_directory(app.config['RESULT_FOLDER'], filename, as_attachment=True)
 
-    return "return fine"
+    except FileNotFoundError:
+        os.abort(404)
 
 
 def decode(file):

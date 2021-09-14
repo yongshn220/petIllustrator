@@ -19,12 +19,12 @@
     
 
     <form action="/download" method="post" class="action-area" enctype="multipart/form-data">
-      <input type="text" name="token" class="input-token" hidden>
+      <input type="text" name="userId" class="input-userId" hidden>
       <input type="file" name="image-files" class="input-file" multiple="multiple" hidden>
       <input type="submit" value="Convert" class="input-submit" disabled>
     </form>
   </div>
-  <script type="text/javascript" src={{url_for('static', filename="js/script.js")}}></script>
+  <script type="text/javascript" src={{url_for('static', filename="js/main.js")}}></script>
   <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 </body>
 </html>

@@ -6,13 +6,13 @@ const actionArea = document.querySelector(".action-area");
 var dragText = dropArea.querySelector("header");
 var fileInput = actionArea.querySelector(".input-file")
 var submitInput = actionArea.querySelector(".input-submit")
-var tokenInput = actionArea.querySelector(".input-token");
+var userIdInput = actionArea.querySelector(".input-userId");
 
 let files;
 
 window.onload = function()
 {
-    tokenInput.value = createToken();
+    userIdInput.value = createToken();
 }
 
 //If user Drag File Over DropArea
