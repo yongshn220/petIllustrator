@@ -22,7 +22,6 @@ body
     display: flex;
     justify-content: center;
     flex-direction: column;
-    background:#ffffff52;
 }
 
 .drag-area
@@ -48,7 +47,6 @@ body
 }
 .drag-area header
 {
-    height: 10px;
     font-size: 25px;
     font-weight: 500;
     color: #fff;
@@ -57,7 +55,7 @@ body
 .main-area .input-submit
 {
     pointer-events: none;
-    margin-top: 50px;
+    margin-top: 20px;
     padding: 5px 25px;
     font-size: 20px;
     font-weight: 500;
@@ -65,7 +63,7 @@ body
     outline: none;
     
     background: #b5b5b5;
-    color: #878787;
+    color: #666666;
     border-radius: 5px;
     cursor: pointer;
 }
