@@ -9,17 +9,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 </head>
 <body>
-  index_2
   <div class="main-area">
     <div class="drag-area">
-      <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
-      <header>Drag & Drop to Upload File</header>
-      <input type="file" hidden>
+      <img src="{{ resImg }}" alt="User Image">
     </div>
-    <img src="{{ resImg }}" alt="User Image">
-    
     <form action="/{{token}}" method="get" class="action-area" enctype="multipart/form-data">
-      <input type="submit" value="download" class=".input-submit.active">
+      <input type="submit" value="download" class="input-download">
     </form>
   </div>
 </body>

@@ -27,9 +27,12 @@ class Main:
         # Image Segmentation
         mask_img = self.segment_img(ori_img)
         # Mask Image (Remove background)
-        bg_img = cv2.imread('./images/Background/Background-white.jpg', cv2.IMREAD_COLOR)
+        # bg_img = cv2.imread('./images/Background/Background-white.jpg', cv2.IMREAD_COLOR)
+
         # merge all Images (Remove Background)
-        sel_img = self.preprocess.mask_img(ori_img, mask_img, bg_img)
+        sel_img = self.preprocess.mask_img(ori_img, mask_img)
+
+        cv2.imwrite('./test.png', sel_img)
         # Cartoonify Image
         result_img = self.cartoonify.canny_method(sel_img)
 

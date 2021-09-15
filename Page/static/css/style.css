@@ -16,7 +16,7 @@ body
 
 .main-area
 {
-    height: 350px;
+    height: 900px;
     width: 900px;
     align-items: center;
     display: flex;
@@ -27,8 +27,8 @@ body
 .drag-area
 {
     border: 2px dashed #fff;
-    height: 200px;
-    width: 800px;
+    height: 400px;
+    width: 400px;
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -71,6 +71,21 @@ body
 .main-area .input-submit.active
 {
     pointer-events: all;
+    background: #fff;
+    color: #5256ad;
+}
+
+.main-area .input-download
+{
+    pointer-events: all;
+    margin-top: 20px;
+    padding: 5px 25px;
+    font-size: 20px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
     background: #fff;
     color: #5256ad;
 }

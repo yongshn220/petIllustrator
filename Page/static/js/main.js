@@ -98,7 +98,6 @@ function jsonToBlob(json)
 
 function showFile(file)
 {
-    console.log("show");
     //if user selected file is an image file
     let fileReader = new FileReader(); //creating new FileReader object
     fileReader.onload = ()=>{
