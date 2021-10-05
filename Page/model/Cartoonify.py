@@ -1,3 +1,4 @@
+from re import L
 import cv2
 import numpy as np
 
@@ -58,11 +59,20 @@ class Cartoonify:
     def canny_method(self, img):
 
         edge_img = self.process_image(img, 2)
+        edge_img = self.dilation(edge_img)
         edge_img = self.white_to_transparent(edge_img)
 
-        k_mean_img = self.k_mean_method(img, 16, 1)
+        #origin
+        # k_mean_img = self.k_mean_method(img, 8, 1)
+        
+        #origin
+        # added_img = self.overlay_transparent(k_mean_img, edge_img, 0, 0)
 
-        added_img = self.overlay_transparent(k_mean_img, edge_img, 0, 0)
+        oil_img = self.oilPaint(img)
+        return oil_img
+        
+        #test
+        added_img = self.overlay_transparent(oil_img, edge_img, 0, 0)
 
         contour_img = self.process_image(added_img, 1)
         contour_img = self.white_to_transparent(contour_img)
@@ -74,6 +84,18 @@ class Cartoonify:
         return vivid_img
 
 
+    def oilPaint(self, img):
+        return cv2.xphoto.oilPainting(img, 3, 1)
+
+
+    def dilation(self, img):
+        kernel_size_row = 3
+        kernel_size_col = 3
+        kernel = np.ones((2, 2), np.uint8)
+
+        dilation_image = cv2.erode(img, kernel, iterations=1)  #// make dilation image
+        return dilation_image
+    
 
     def detect_edge(self, img):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -85,8 +107,8 @@ class Cartoonify:
     def process_image(self, img, blur):
         gray = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
         if blur == 2:
-            gray = cv2.GaussianBlur(img, (7, 7), 0)
-            canny = cv2.Canny(gray, 150, 200)
+            gray = cv2.GaussianBlur(img, (0, 0), 3)
+            canny = cv2.Canny(gray, 0, 50)
             
             # result = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
             # return result
@@ -106,6 +128,12 @@ class Cartoonify:
 
         result_img = cv2.cvtColor(dil_img, cv2.COLOR_GRAY2BGR)
         return result_img
+
+
+    def inverseImage(self, img):
+        r, dil_img = cv2.threshold(img, 50, 255, cv2.THRESH_BINARY_INV)
+        return dil_img
+
 
 
     def vivid_image(self, img):
