@@ -67,8 +67,8 @@ class Cartoonify:
         contour_img = self.process_image(added_img, 1)
         contour_img = self.white_to_transparent(contour_img)
 
-        result_img = self.overlay_transparent(added_img, contour_img, 0, 0)
-        # result_img = self.contour_image(result_img)
+        #result_img = self.overlay_transparent(added_img, contour_img, 0, 0)
+        #result_img = self.contour_image(result_img)
 
         vivid_img = self.vivid_image(added_img)
         return vivid_img
@@ -85,8 +85,11 @@ class Cartoonify:
     def process_image(self, img, blur):
         gray = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
         if blur == 2:
-            gray = cv2.GaussianBlur(gray, (9, 9), 0)
-            canny = cv2.Canny(gray, 50, 100)
+            gray = cv2.GaussianBlur(img, (7, 7), 0)
+            canny = cv2.Canny(gray, 150, 200)
+            
+            # result = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+            # return result
 
         elif blur == 1:
             gray = cv2.GaussianBlur(gray, (9, 9), 0)
@@ -96,7 +99,7 @@ class Cartoonify:
         else:
             canny = cv2.Canny(gray, 50, 75)
 
-        # canny = self.rescale(canny, self.pseudoDim)
+        #canny = self.rescale(canny, self.pseudoDim)
 
 
         r, dil_img = cv2.threshold(canny, 50, 255, cv2.THRESH_BINARY_INV)
