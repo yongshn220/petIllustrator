@@ -58,36 +58,27 @@ class Cartoonify:
 
     def canny_method(self, img):
 
+        oil_img = self.oilPaint(img)
+        return oil_img
+
         edge_img = self.process_image(img, 2)
         edge_img = self.dilation(edge_img)
         edge_img = self.white_to_transparent(edge_img)
 
-        #origin
+        # k_mean
         # k_mean_img = self.k_mean_method(img, 8, 1)
         
-        #origin
-        # added_img = self.overlay_transparent(k_mean_img, edge_img, 0, 0)
+        add_img = self.overlay_transparent(oil_img, edge_img, 0, 0)
 
-        oil_img = self.oilPaint(img)
-        return oil_img
-        
-        #test
-        added_img = self.overlay_transparent(oil_img, edge_img, 0, 0)
-
-        contour_img = self.process_image(added_img, 1)
-        contour_img = self.white_to_transparent(contour_img)
-
-        #result_img = self.overlay_transparent(added_img, contour_img, 0, 0)
-        #result_img = self.contour_image(result_img)
-
-        vivid_img = self.vivid_image(added_img)
-        return vivid_img
+        result_img = self.vivid_image(add_img)
+        return result_img
 
 
+    # change image into oilpainting
     def oilPaint(self, img):
         return cv2.xphoto.oilPainting(img, 3, 1)
 
-
+    # dilate or erode image
     def dilation(self, img):
         kernel_size_row = 3
         kernel_size_col = 3
@@ -96,7 +87,7 @@ class Cartoonify:
         dilation_image = cv2.erode(img, kernel, iterations=1)  #// make dilation image
         return dilation_image
     
-
+    # detect edge
     def detect_edge(self, img):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         gray = cv2.medianBlur(gray, 5)
@@ -104,6 +95,7 @@ class Cartoonify:
         return edges
 
 
+    # detect edge with canny 
     def process_image(self, img, blur):
         gray = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
         if blur == 2:
@@ -135,7 +127,7 @@ class Cartoonify:
         return dil_img
 
 
-
+    # change image vivid
     def vivid_image(self, img):
 
         # CLAHE (Contrast Limited Adaptive Histogram Equalization)
@@ -200,6 +192,7 @@ class Cartoonify:
         ol_img = cv2.addWeighted(img1, 1, img2, 0.5, 0)
         return ol_img
 
+    # change white area into transparent
     def white_to_transparent(self, img):
 
         # get the image dimensions (height, width and channels)
