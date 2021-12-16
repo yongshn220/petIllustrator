@@ -16,7 +16,13 @@ class Segmentation:
     def segment(self, img):
         pil_img = self.convert_image(img)
 
-        return self.process(self.dlab, pil_img, show_orig=False)
+        dev = ""
+        if(torch.cuda.is_available()):
+            dev = "cuda"
+        else:
+            dev = "cpu"
+
+        return self.process(self.dlab, pil_img, dev, show_orig=False)
 
 
     def convert_image(self, img):
@@ -25,7 +31,7 @@ class Segmentation:
         return res_img
 
 
-    def process(self, net, img, show_orig=True, dev='cuda'):
+    def process(self, net, img, dev, show_orig=True):
         #img = Image.open(path)
 
         if show_orig:

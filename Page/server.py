@@ -9,14 +9,15 @@ import cv2
 import numpy as np
 import os
 
-COVER_FOLDER = os.path.join('static', 'image')
-RESULT_FOLDER = "C:\Github\Python\PetIllustrator\Page\images\Result"
-
-
 main = Main()
 app = Flask(__name__)
+
+COVER_FOLDER = os.path.join('static', 'image')
+RESULT_FOLDER = "/Users/yongjung/Private/Programming/Projects/Web/pet_illustrator/Page/images/Result"
 app.config['COVER_FOLDER'] = COVER_FOLDER
 app.config['RESULT_FOLDER'] = RESULT_FOLDER
+
+
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -52,7 +53,6 @@ def download():
 @app.route("/<token>", methods=['GET'])
 def downloadFile(token):
     s = Serializer('WEBSITE_SECRET_KEY')
-    
     try:
         data = s.loads(token)
     except:
@@ -80,3 +80,5 @@ def decode(file):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
